@@ -1,50 +1,55 @@
-import React, { useState } from 'react';
-import { Shield, User, Stethoscope, Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+/** @format */
+
+import React, { useState } from "react";
+import { Shield, User, Stethoscope, Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [selectedRole, setSelectedRole] = useState('patient');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState("patient");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const roles = [
-    { id: 'admin', label: 'Admin', icon: Shield },
-    { id: 'patient', label: 'Patient', icon: User },
-    { id: 'doctor', label: 'Doctor', icon: Stethoscope },
+    { id: "admin", label: "Admin", icon: Shield },
+    { id: "patient", label: "Patient", icon: User },
+    { id: "doctor", label: "Doctor", icon: Stethoscope },
   ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, role: selectedRole }),
-      });
+      const response = await fetch(
+        "http://hms-anas-backend.vercel.app/api/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password, role: selectedRole }),
+        }
+      );
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userRole', data.role);
-        localStorage.setItem('userEmail', email);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userRole", data.role);
+        localStorage.setItem("userEmail", email);
 
-        if (data.role === 'admin') {
-          navigate('/admin');
-        } else if (data.role === 'doctor') {
-          navigate('/doctor');
+        if (data.role === "admin") {
+          navigate("/admin");
+        } else if (data.role === "doctor") {
+          navigate("/doctor");
         } else {
-          navigate('/patient');
+          navigate("/patient");
         }
       } else {
         const errorData = await response.json();
         setError(errorData.error);
       }
     } catch (error) {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
     }
   };
 
@@ -52,7 +57,9 @@ const Login = () => {
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="bg-blue-600 p-6 text-white">
-          <h2 className="text-2xl font-bold text-center">Login to HealthCare Portal</h2>
+          <h2 className="text-2xl font-bold text-center">
+            Login to HealthCare Portal
+          </h2>
           <p className="text-center text-blue-100 mt-1">Access your account</p>
         </div>
         <div className="p-6">
@@ -62,7 +69,9 @@ const Login = () => {
                 key={role.id}
                 onClick={() => setSelectedRole(role.id)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md transition-colors ${
-                  selectedRole === role.id ? 'bg-blue-600 text-white' : 'text-blue-600'
+                  selectedRole === role.id
+                    ? "bg-blue-600 text-white"
+                    : "text-blue-600"
                 }`}
               >
                 <role.icon size={16} />
@@ -72,7 +81,10 @@ const Login = () => {
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-1 text-left">
+              <label
+                htmlFor="email"
+                className="block text-lg font-medium text-gray-700 mb-1 text-left"
+              >
                 Email
               </label>
               <input
@@ -86,7 +98,10 @@ const Login = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-lg font-medium text-gray-700 mb-1 text-left">
+              <label
+                htmlFor="password"
+                className="block text-lg font-medium text-gray-700 mb-1 text-left"
+              >
                 Password
               </label>
               <div className="relative">
@@ -125,8 +140,11 @@ const Login = () => {
         </div>
         <div className="bg-gray-50 px-6 py-4 text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
-            <button onClick={() => navigate('/signup')} className="text-blue-600 font-semibold hover:underline">
+            Don't have an account?{" "}
+            <button
+              onClick={() => navigate("/signup")}
+              className="text-blue-600 font-semibold hover:underline"
+            >
               Sign up
             </button>
           </p>
